@@ -27,6 +27,8 @@ func main() {
 
 	// Initialize our gRPC server using our TCP server.
 	grpcServer := grpc.NewServer()
+	// For debugging purposes only.
+    log.Printf("STORAGE: gRPC server ready and running.")
 	pb.RegisterMikapodStorageServer(grpcServer, &rpc.MikapodStorageGRPC{})
 	if err := grpcServer.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
