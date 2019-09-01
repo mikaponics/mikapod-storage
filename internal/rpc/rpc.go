@@ -13,7 +13,7 @@ func (s *MikapodStorageGRPC) AddTimeSeriesDatum(ctx context.Context, in *pb.Time
 	ms := storage.InitMikapodStorage()
 	ms.InsertTimeSeriesData(in.Instrument, in.Value, in.Timestamp)
 	return &pb.MikapodStorageResponse{
-		Message: "Instrument " + in.Instrument,
+		Message: "Instrument was updated",
 		Status: true,
 	}, nil
 }

@@ -15,7 +15,7 @@ service MikapodStorage {
 }
 
 message TimeSeriesDatumRequest {
-    string instrument = 1;
+    int32 instrument = 1;
     float value = 2;
     google.protobuf.Timestamp timestamp = 3;
 }

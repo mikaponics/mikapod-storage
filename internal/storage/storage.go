@@ -18,17 +18,17 @@ type MikapodStorage struct {
 
 func InitMikapodStorage() (*MikapodStorage) {
     database, _ := sql.Open("sqlite3", "./mikapod.db")
-    statement, _ := database.Prepare("CREATE TABLE IF NOT EXISTS people (id INTEGER PRIMARY KEY, firstname TEXT, lastname TEXT)")
+    statement, _ := database.Prepare("CREATE TABLE IF NOT EXISTS time_series_data (id UNSIGNED BIG INT PRIMARY KEY, instrument INTEGER, value REAL, timestamp UNSIGNED BIG INT)")
     statement.Exec()
     return &MikapodStorage{
         database: database,
     }
 }
 
-func (s *MikapodStorage) InsertTimeSeriesData(instrument string, value float32, t *timestamp.Timestamp) {
+func (s *MikapodStorage) InsertTimeSeriesData(instrument int32, value float32, t *timestamp.Timestamp) {
     log.Printf("Instrument: %v", instrument)
 	log.Printf("Value: %v", value)
-	log.Printf("Timestamp: %v", t)
-    // statement, _ = database.Prepare("INSERT INTO people (firstname, lastname) VALUES (?, ?)")
-    // statement.Exec("Nic", "Raboy")
+	log.Printf("Timestamp: %v", t.Seconds)
+    statement, _ := s.database.Prepare("INSERT INTO time_series_data (instrument, value, timestamp) VALUES (?, ?, ?)")
+    statement.Exec(instrument, value, t.Seconds)
 }
