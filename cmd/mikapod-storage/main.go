@@ -9,7 +9,7 @@ import (
 	pb "github.com/mikaponics/mikapod-storage/api"
 	"github.com/mikaponics/mikapod-storage/configs"
 	"github.com/mikaponics/mikapod-storage/internal/storage"
-	"github.com/mikaponics/mikapod-storage/internal/rpc"
+	"github.com/mikaponics/mikapod-storage/internal/app"
 )
 
 
@@ -28,8 +28,8 @@ func main() {
 	// Initialize our gRPC server using our TCP server.
 	grpcServer := grpc.NewServer()
 	// For debugging purposes only.
-    log.Printf("STORAGE: gRPC server ready and running.")
-	pb.RegisterMikapodStorageServer(grpcServer, &rpc.MikapodStorageGRPC{})
+    log.Printf("gRPC server running.")
+	pb.RegisterMikapodStorageServer(grpcServer, &app.MikapodStorageGRPC{})
 	if err := grpcServer.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}
