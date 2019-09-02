@@ -11,6 +11,12 @@ import (
     "github.com/golang/protobuf/ptypes/timestamp"
 )
 
+type TimeSeriesDatum struct {
+    Id int64
+    Instrument int32
+    Value float32
+    Timestamp int64
+}
 
 type MikapodDB struct {
     database *sql.DB
@@ -21,7 +27,7 @@ func InitMikapodDB() (*MikapodDB) {
     // (1) SQLite3 Fields via https://www.sqlite.org/datatype3.html
     // (2) Learn SQL through W3Schools via https://www.w3schools.com/sql/default.asp
     database, _ := sql.Open("sqlite3", "./mikapod.db")
-    statement, _ := database.Prepare("CREATE TABLE IF NOT EXISTS time_series_data (id UNSIGNED BIG INT PRIMARY KEY, instrument INTEGER, value REAL, timestamp UNSIGNED BIG INT)")
+    statement, _ := database.Prepare("CREATE TABLE IF NOT EXISTS time_series_data (id INTEGER PRIMARY KEY AUTOINCREMENT, instrument INTEGER, value REAL, timestamp UNSIGNED BIG INT)")
     statement.Exec()
     return &MikapodDB{
         database: database,
@@ -29,9 +35,29 @@ func InitMikapodDB() (*MikapodDB) {
 }
 
 func (s *MikapodDB) InsertTimeSeriesData(instrument int32, value float32, t *timestamp.Timestamp) {
-    log.Printf("Instrument: %v", instrument)
-	log.Printf("Value: %v", value)
-	log.Printf("Timestamp: %v", t.Seconds)
     statement, _ := s.database.Prepare("INSERT INTO time_series_data (instrument, value, timestamp) VALUES (?, ?, ?)")
     statement.Exec(instrument, value, t.Seconds)
+	log.Printf("Executed Insertion")
+}
+
+func (s *MikapodDB) ListTimeSeriesData() ([]TimeSeriesDatum){
+    rows, _ := s.database.Query("SELECT id, instrument, value, timestamp FROM time_series_data")
+    arr := make([]TimeSeriesDatum, 1)
+
+    var id int64
+    var instrument int32
+    var value float32
+    var timestamp int64
+    for rows.Next() {
+        rows.Scan(&id, &instrument, &value, &timestamp)
+        // log.Printf("Rows: %v", rows)
+        arr = append(arr, TimeSeriesDatum{
+            Id: id,
+            Instrument: instrument,
+            Value: value,
+            Timestamp: timestamp,
+        });
+    }
+    log.Printf("Executed Listing")
+    return arr
 }

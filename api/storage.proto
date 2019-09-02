@@ -10,7 +10,7 @@ import "google/protobuf/timestamp.proto";
 
 service MikapodStorage {
     rpc AddTimeSeriesDatum (TimeSeriesDatumRequest) returns (MikapodStorageResponse) {}
-
+    rpc listTimeSeriesDatum (ListTimeSeriesDataRequest) returns (ListTimeSeriesDataResponse) {}
     // https://grpc.io/docs/tutorials/basic/go/
 }
 
@@ -23,6 +23,19 @@ message TimeSeriesDatumRequest {
 message MikapodStorageResponse {
     string message = 1;
     bool status = 2;
+}
+
+message ListTimeSeriesDataRequest {} //empty
+
+message ListTimeSeriesDataResponse {
+    repeated TimeSeriesDatum data = 1;
+}
+
+message TimeSeriesDatum {
+    int64 id = 1;
+    int32 instrument = 2;
+    float value = 3;
+    google.protobuf.Timestamp timestamp = 4;
 }
 
 // def getAllTimeSeriesData(self):
