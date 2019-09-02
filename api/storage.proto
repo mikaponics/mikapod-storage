@@ -10,7 +10,7 @@ import "google/protobuf/timestamp.proto";
 
 service MikapodStorage {
     rpc AddTimeSeriesDatum (TimeSeriesDatumRequest) returns (MikapodStorageResponse) {}
-    rpc listTimeSeriesDatum (ListTimeSeriesDataRequest) returns (ListTimeSeriesDataResponse) {}
+    rpc listTimeSeriesData (ListTimeSeriesDataRequest) returns (ListTimeSeriesDataResponse) {}
     rpc deleteTimeSeriesData (DeleteTimeSeriesDataByPKsRequest) returns (DeleteTimeSeriesDataResponse) {}
     // https://grpc.io/docs/tutorials/basic/go/
 }

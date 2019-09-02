@@ -22,7 +22,7 @@ func (s *MikapodStorageGRPC) AddTimeSeriesDatum(ctx context.Context, in *pb.Time
 	}, nil
 }
 
-func (s *MikapodStorageGRPC) ListTimeSeriesDatum(ctx context.Context, in *pb.ListTimeSeriesDataRequest) (*pb.ListTimeSeriesDataResponse, error) {
+func (s *MikapodStorageGRPC) ListTimeSeriesData(ctx context.Context, in *pb.ListTimeSeriesDataRequest) (*pb.ListTimeSeriesDataResponse, error) {
 	// Fetch the data from our database.
 	data := s.db.ListTimeSeriesData()
 
