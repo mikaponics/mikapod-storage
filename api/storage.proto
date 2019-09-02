@@ -11,8 +11,11 @@ import "google/protobuf/timestamp.proto";
 service MikapodStorage {
     rpc AddTimeSeriesDatum (TimeSeriesDatumRequest) returns (MikapodStorageResponse) {}
     rpc listTimeSeriesDatum (ListTimeSeriesDataRequest) returns (ListTimeSeriesDataResponse) {}
+    rpc deleteTimeSeriesData (DeleteTimeSeriesDataByPKsRequest) returns (DeleteTimeSeriesDataResponse) {}
     // https://grpc.io/docs/tutorials/basic/go/
 }
+
+// --- ADD ---
 
 message TimeSeriesDatumRequest {
     int32 instrument = 1;
@@ -24,6 +27,8 @@ message MikapodStorageResponse {
     string message = 1;
     bool status = 2;
 }
+
+// --- LIST ---
 
 message ListTimeSeriesDataRequest {} //empty
 
@@ -38,29 +43,13 @@ message TimeSeriesDatum {
     google.protobuf.Timestamp timestamp = 4;
 }
 
-// def getAllTimeSeriesData(self):
-//         return self.__storage.getAllTimeSeriesData()
-//
-//     def insertTimeSeriesDatum(self, instrument_uuid, value, timestamp, timestep):
-//         return self.__storage.insertTimeSeriesDatum(instrument_uuid, value, timestamp, timestep)
-//
-//     def deleteTimeSeriesDatum(self, id):
-//         return self.__storage.deleteTimeSeriesDatum(id)
-//
-//     def setKeyValueItem(self, key, value):
-//         return self.__storage.setKeyValueItem(key, value)
-//
-//     def getValueFromKeyValueItemByKey(self, key):
-//         return self.__storage.getValueFromKeyValueItemByKey(key)
-//
-//     def getAllTimeSeriesImageData(self):
-//         return self.__storage.getAllTimeSeriesImageData()
-//
-//     def insertTimeSeriesImageDatum(self, instrument_uuid, image_info, timestamp, timestep):
-//         # DEVELOPERS NOTE:
-//         # - READ: https://pythonhosted.org/Pyro4/tipstricks.html?highlight=image#binarytransfer
-//         # - In essence we need to use the `serpent` library to deserialize and convert to binary.
-//         image_data = serpent.tobytes(image_info)   # in case of serpent encoded bytes
-//         return self.__storage.insertTimeSeriesImageDatum(instrument_uuid, image_data, timestamp, timestep)
+// --- DELETE ---
 
-//TODO: IMPLEMENT: https://github.com/mikaponics/mikapod-soil/blob/master/src/storage/storage_service.py
+message DeleteTimeSeriesDataByPKsRequest {
+    repeated int64 pks = 1;
+}
+
+message DeleteTimeSeriesDataResponse {
+    string message = 1;
+    bool status = 2;
+}

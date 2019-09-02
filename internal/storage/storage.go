@@ -61,3 +61,12 @@ func (s *MikapodDB) ListTimeSeriesData() ([]TimeSeriesDatum){
     log.Printf("Executed Listing")
     return arr
 }
+
+func (s *MikapodDB) DeleteTimeSeriesData(pks []int64) {
+    log.Printf("Deleting time-series data with PKs: %v", pks)
+    for _, v := range pks {
+        statement, _ := s.database.Prepare("DELETE FROM time_series_data WHERE id=(?)")
+        statement.Exec(v)
+    }
+	log.Printf("Executed Deletions")
+}

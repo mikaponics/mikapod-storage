@@ -56,3 +56,11 @@ func (s *MikapodStorageGRPC) ListTimeSeriesDatum(ctx context.Context, in *pb.Lis
 		Data: list,
 	}, nil
 }
+
+func (s *MikapodStorageGRPC) DeleteTimeSeriesData(ctx context.Context, in *pb.DeleteTimeSeriesDataByPKsRequest) (*pb.DeleteTimeSeriesDataResponse, error) {
+	s.db.DeleteTimeSeriesData(in.Pks)
+	return &pb.DeleteTimeSeriesDataResponse{
+		Message: "Time-series data was deleted",
+		Status: true,
+	}, nil
+}
