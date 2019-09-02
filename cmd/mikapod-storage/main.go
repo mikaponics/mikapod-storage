@@ -1,36 +1,33 @@
 package main // github.com/mikaponics/mikapod-soil/cmd/storage
 
 import (
-	"log"
-	"net"
+	"os"
+	"os/signal"
+	"syscall"
 
-	"google.golang.org/grpc"
-
-	pb "github.com/mikaponics/mikapod-storage/api"
-	"github.com/mikaponics/mikapod-storage/configs"
-	"github.com/mikaponics/mikapod-storage/internal/storage"
 	"github.com/mikaponics/mikapod-storage/internal/app"
 )
 
 
-
 func main() {
-	// Create our database on program load if it has not been created previously.
-	storage.InitMikapodStorage()
+	app := app.InitMikapodStorage()
 
-    // Open a TCP server to the specified localhost and environment variable
-	// specified port number.
-	lis, err := net.Listen("tcp", configs.MikapodStorageServicePort)
-	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
-	}
+    // DEVELOPERS CODE:
+	// The following code will create an anonymous goroutine which will have a
+	// blocking chan `sigs`. This blocking chan will only unblock when the
+	// golang app receives a termination command; therfore the anyomous
+	// goroutine will run and terminate our running application.
+	//
+	// Special Thanks:
+	// (1) https://gobyexample.com/signals
+	// (2) https://guzalexander.com/2017/05/31/gracefully-exit-server-in-go.html
+	//
+	sigs := make(chan os.Signal, 1)
+	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
+	go func() {
+        <-sigs // Block execution until signal from terminal gets triggered here.
+        app.StopMainRuntimeLoop()
+    }()
 
-	// Initialize our gRPC server using our TCP server.
-	grpcServer := grpc.NewServer()
-	// For debugging purposes only.
-    log.Printf("gRPC server running.")
-	pb.RegisterMikapodStorageServer(grpcServer, &app.MikapodStorageGRPC{})
-	if err := grpcServer.Serve(lis); err != nil {
-		log.Fatalf("failed to serve: %v", err)
-	}
+    app.RunMainRuntimeLoop()
 }
