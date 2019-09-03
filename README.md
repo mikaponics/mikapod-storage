@@ -35,7 +35,7 @@ You must have the following installed before proceeding. If you are missing any 
 
     ```
     cd ~/go/src/github.com/mikaponics/mikapod-storage
-    go run cmd/mikapod-storage/main.go
+    go run main.go
     ```
 
 4. You now should see a message saying ``gRPC server is running`` then the application is running.
@@ -89,19 +89,19 @@ The following instructions are specific to getting setup for [Raspberry Pi](http
 7. Run our application.
 
     ```
-    cd ~/go/src/github.com/mikaponics/mikapod-storage/cmd/mikapod-storage
+    cd ~/go/src/github.com/mikaponics/mikapod-storage
     ```
 
 8. (Optional) Confirm our application builds on the raspberry pi device. You now should see a message saying ``gRPC server is running`` then the application is running.
 
     ```
-    go run
+    go run main.go
     ```
 
-9. Build for the ARM device
+9. Build for the ARM device and install it in our ``bin`` folder:
 
     ```
-    go build
+    go install
     ```
 
 ### Operation
