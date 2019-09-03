@@ -86,7 +86,7 @@ The following instructions are specific to getting setup for [Raspberry Pi](http
     go get -u github.com/mattn/go-sqlite3
     ```
 
-7. Run our application.
+7. Go to our application directory.
 
     ```
     cd ~/go/src/github.com/mikaponics/mikapod-storage
