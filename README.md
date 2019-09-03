@@ -98,7 +98,7 @@ The following instructions are specific to getting setup for [Raspberry Pi](http
     go run main.go
     ```
 
-9. Build for the ARM device and install it in our ``bin`` folder:
+9. Build for the ARM device and install it in our ``~/go/bin`` folder:
 
     ```
     go install
@@ -116,12 +116,12 @@ The following instructions are specific to getting setup for [Raspberry Pi](http
 
     ```
     [Unit]
-    Description=Mikapod Storage Interface Daemon
+    Description=Mikapod Storage Daemon
     After=multi-user.target
 
     [Service]
     Type=idle
-    ExecStart=/home/pi/go/src/github.com/mikaponics/mikapod-storage/cmd/mikapod-storage/mikapod-storage
+    ExecStart=/home/pi/go/bin/mikapod-storage
     Restart=on-failure
     KillSignal=SIGTERM
 
@@ -159,7 +159,7 @@ The following instructions are specific to getting setup for [Raspberry Pi](http
 8. To reload the latest modifications to systemctl file.
 
     ```
-    systemctl daemon-reload
+    sudo systemctl daemon-reload
     ```
 
 ## License
