@@ -41,7 +41,7 @@ func (s *MikapodDB) InsertTimeSeriesData(instrument int32, value float32, t *tim
 }
 
 func (s *MikapodDB) ListTimeSeriesData() ([]TimeSeriesDatum){
-    rows, _ := s.database.Query("SELECT id, instrument, value, timestamp FROM time_series_data")
+    rows, _ := s.database.Query("SELECT id, instrument, value, timestamp FROM time_series_data LIMIT 250")
     arr := make([]TimeSeriesDatum, 1)
 
     var id int64
