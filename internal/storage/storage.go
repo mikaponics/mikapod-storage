@@ -5,7 +5,7 @@ import (
     "time"
     // "fmt"
     // "strconv"
-    "log"
+    // "log"
 
     _ "github.com/mattn/go-sqlite3"
 )
@@ -36,7 +36,7 @@ func InitMikapodDB() (*MikapodDB) {
 func (s *MikapodDB) InsertTimeSeriesData(instrument int32, value float32, t time.Time) error {
     statement, err := s.database.Prepare("INSERT INTO time_series_data (instrument, value, timestamp) VALUES (?, ?, ?)")
     statement.Exec(instrument, value, t)
-	log.Printf("Executed Insertion")
+	// log.Printf("Executed Insertion")
     return err
 }
 
@@ -58,15 +58,15 @@ func (s *MikapodDB) ListTimeSeriesData() ([]TimeSeriesDatum){
             Timestamp: timestamp,
         });
     }
-    log.Printf("Executed Listing")
+    // log.Printf("Executed Listing")
     return arr
 }
 
 func (s *MikapodDB) DeleteTimeSeriesData(pks []int64) {
-    log.Printf("Deleting time-series data with PKs: %v", pks)
+    // log.Printf("Deleting time-series data with PKs: %v", pks)
     for _, v := range pks {
         statement, _ := s.database.Prepare("DELETE FROM time_series_data WHERE id=(?)")
         statement.Exec(v)
     }
-	log.Printf("Executed Deletions")
+	// log.Printf("Executed Deletions")
 }
