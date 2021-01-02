@@ -15,7 +15,7 @@ The purpose of this application is to provide a local database tailored for stor
 
 You must have the following installed before proceeding. If you are missing any one of these then you cannot begin.
 
-* ``Go 1.12.7``
+* ``Go 1.15.6``
 
 ## Installation
 1. Get our latest code.

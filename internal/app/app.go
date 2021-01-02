@@ -2,24 +2,38 @@ package app // github.com/mikaponics/mikapod-storage/internal
 
 import (
     "log"
-	"net"
+    "net"
+    "net/rpc"
+    "net/http"
 
-	"google.golang.org/grpc"
-
-	pb "github.com/mikaponics/mikapod-storage/api"
 	"github.com/mikaponics/mikapod-storage/configs"
 	"github.com/mikaponics/mikapod-storage/internal/storage"
+    "github.com/mikaponics/mikapod-storage/internal/rpc_server"
 )
 
 type MikapodStorage struct {
-    db *storage.MikapodDB
-    grpcServer *grpc.Server
+    tcpAddr *net.TCPAddr
+    listener *net.TCPListener
+    rpcServer *rpc_server.RPC
 }
 
 func InitMikapodStorage() (*MikapodStorage) {
+    tcpAddr, err := net.ResolveTCPAddr("tcp", configs.MikapodStorageServiceAddress)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+    storage := storage.InitMikapodDB()
+
+    r := &rpc_server.RPC{
+		Store: storage,
+	}
+
+    log.Println("RPC API was initialized.")
     return &MikapodStorage{
-        db: storage.InitMikapodDB(),
-        grpcServer: nil,
+        tcpAddr: tcpAddr,
+        listener: nil,
+        rpcServer : r,
     }
 }
 
@@ -27,31 +41,16 @@ func InitMikapodStorage() (*MikapodStorage) {
 // Function will consume the main runtime loop and run the business logic
 // of the Mikapod Logger application.
 func (app *MikapodStorage) RunMainRuntimeLoop() {
-    // Open a TCP server to the specified localhost and environment variable
-    // specified port number.
-    lis, err := net.Listen("tcp", configs.MikapodStorageServiceAddress)
-    if err != nil {
-        log.Fatalf("failed to listen: %v", err)
-    }
-
-    // Initialize our gRPC server using our TCP server.
-    grpcServer := grpc.NewServer()
-
-    // Save reference to our application state.
-    app.grpcServer = grpcServer
-
-    // For debugging purposes only.
-    log.Printf("gRPC server is running.")
-
-    // Block the main runtime loop for accepting and processing gRPC requests.
-    pb.RegisterMikapodStorageServer(grpcServer, &MikapodStorageGRPC{
-        // DEVELOPERS NOTE:
-        // We want to attach to every gRPC call the following variables...
-        db: app.db,
-    })
-    if err := grpcServer.Serve(lis); err != nil {
-        log.Fatalf("failed to serve: %v", err)
-    }
+    rpc.Register(app.rpcServer)
+	rpc.HandleHTTP()
+	log.Println("RPC was initialized.")
+	l, e := net.ListenTCP("tcp", app.tcpAddr)
+    app.listener = l // Track the `listener` so we can gracefully shutdown later.
+	if e != nil {
+		log.Fatal("listen error:", e.Error())
+	}
+	log.Println("Started storage service.")
+	http.Serve(l, nil)
 }
 
 // Function will tell the application to stop the main runtime loop when
@@ -60,6 +59,6 @@ func (app *MikapodStorage) StopMainRuntimeLoop() {
     log.Printf("Starting graceful shutdown now...")
 
     // Finish any RPC communication taking place at the moment before
-    // shutting down the gRPC server.
-    app.grpcServer.GracefulStop()
+    // shutting down the RPC server.
+    app.listener.Close()
 }

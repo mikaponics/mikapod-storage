@@ -2,20 +2,19 @@ package storage
 
 import (
     "database/sql"
-    // "time"
+    "time"
     // "fmt"
     // "strconv"
     "log"
 
     _ "github.com/mattn/go-sqlite3"
-    "github.com/golang/protobuf/ptypes/timestamp"
 )
 
 type TimeSeriesDatum struct {
     Id int64
     Instrument int32
     Value float32
-    Timestamp int64
+    Timestamp time.Time
 }
 
 type MikapodDB struct {
@@ -34,9 +33,9 @@ func InitMikapodDB() (*MikapodDB) {
     }
 }
 
-func (s *MikapodDB) InsertTimeSeriesData(instrument int32, value float32, t *timestamp.Timestamp) {
+func (s *MikapodDB) InsertTimeSeriesData(instrument int32, value float32, t *time.Time) {
     statement, _ := s.database.Prepare("INSERT INTO time_series_data (instrument, value, timestamp) VALUES (?, ?, ?)")
-    statement.Exec(instrument, value, t.Seconds)
+    statement.Exec(instrument, value, t)
 	log.Printf("Executed Insertion")
 }
 
@@ -47,7 +46,7 @@ func (s *MikapodDB) ListTimeSeriesData() ([]TimeSeriesDatum){
     var id int64
     var instrument int32
     var value float32
-    var timestamp int64
+    var timestamp time.Time
     for rows.Next() {
         rows.Scan(&id, &instrument, &value, &timestamp)
         // log.Printf("Rows: %v", rows)
