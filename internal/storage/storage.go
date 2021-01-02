@@ -5,7 +5,7 @@ import (
     "time"
     // "fmt"
     // "strconv"
-    // "log"
+    "log"
 
     _ "github.com/mattn/go-sqlite3"
 )
@@ -25,8 +25,14 @@ func InitMikapodDB() (*MikapodDB) {
     // DEVELOPERS NOTE:
     // (1) SQLite3 Fields via https://www.sqlite.org/datatype3.html
     // (2) Learn SQL through W3Schools via https://www.w3schools.com/sql/default.asp
-    database, _ := sql.Open("sqlite3", "./mikapod.db")
-    statement, _ := database.Prepare("CREATE TABLE IF NOT EXISTS time_series_data (id INTEGER PRIMARY KEY AUTOINCREMENT, instrument INTEGER, value REAL, timestamp UNSIGNED BIG INT)")
+    database, err := sql.Open("sqlite3", "./mikapod.db")
+    if err != nil {
+        log.Fatal(err)
+    }
+    statement, err := database.Prepare("CREATE TABLE IF NOT EXISTS time_series_data (id INTEGER PRIMARY KEY AUTOINCREMENT, instrument INTEGER, value REAL, timestamp UNSIGNED BIG INT)")
+    if err != nil {
+        log.Fatal(err)
+    }
     statement.Exec()
     return &MikapodDB{
         database: database,
@@ -36,7 +42,7 @@ func InitMikapodDB() (*MikapodDB) {
 func (s *MikapodDB) InsertTimeSeriesData(instrument int32, value float32, t time.Time) error {
     statement, err := s.database.Prepare("INSERT INTO time_series_data (instrument, value, timestamp) VALUES (?, ?, ?)")
     statement.Exec(instrument, value, t)
-	// log.Printf("Executed Insertion")
+	log.Printf("Executed Insertion")
     return err
 }
 
