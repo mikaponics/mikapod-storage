@@ -42,7 +42,7 @@ func InitMikapodDB() (*MikapodDB) {
 func (s *MikapodDB) InsertTimeSeriesData(instrument int32, value float32, t time.Time) error {
     statement, err := s.database.Prepare("INSERT INTO time_series_data (instrument, value, timestamp) VALUES (?, ?, ?)")
     statement.Exec(instrument, value, t)
-	log.Printf("Executed Insertion")
+	// log.Printf("Executed Insertion")
     return err
 }
 
