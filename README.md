@@ -18,7 +18,7 @@ You must have the following installed before proceeding. If you are missing any 
 * ``Go 1.15.6``
 
 ## Installation
-1. Get our latest code.
+1. Download the source code, build and install the application.
 
     ```
     GO111MODULE=on go get -u github.com/mikaponics/mikapod-storage
@@ -27,11 +27,10 @@ You must have the following installed before proceeding. If you are missing any 
 2. Run our application.
 
     ```
-    cd ~/go/src/github.com/mikaponics/mikapod-storage
-    go run main.go
+    mikapod-storage
     ```
 
-4. You now should see a message saying ``Started storage service`` then the application is running.
+3. You now should see a message saying ``Started storage service`` then the application is running.
 
 ## License
 
