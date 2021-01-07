@@ -27,7 +27,7 @@ You must have the following installed before proceeding. If you are missing any 
 2. Run our application.
 
     ```
-    mikapod-storage
+    mikapod-storage serve
     ```
 
 3. You now should see a message saying ``Started storage service`` then the application is running.
