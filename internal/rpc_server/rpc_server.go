@@ -4,6 +4,6 @@ import (
 	"github.com/mikaponics/mikapod-storage/internal/storage"
 )
 
-type RPC struct{
+type RPC struct {
 	Store *storage.MikapodDB
 }
