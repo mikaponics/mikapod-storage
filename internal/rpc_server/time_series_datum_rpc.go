@@ -4,6 +4,10 @@ import (
 	c "github.com/mikaponics/mikapod-storage/pkg/rpc_client"
 )
 
+var (
+	DB_RECORD_FETCH_LIMIT int32 = 250
+)
+
 func (rpc *RPC) AddTimeSeriesDatum(request *c.TimeSeriesDatumCreateRequest, response *c.TimeSeriesDatumCreateResponse) error {
 	err := rpc.Store.InsertTimeSeriesData(request.Instrument, request.Value, request.Timestamp)
 	if err != nil {
@@ -16,7 +20,7 @@ func (rpc *RPC) AddTimeSeriesDatum(request *c.TimeSeriesDatumCreateRequest, resp
 
 func (s *RPC) ListTimeSeriesData(request *c.TimeSeriesDatumListRequest, response *c.TimeSeriesDatumListResponse) error {
 	// Call our local storage and return all the results we have saved.
-	rawResults := s.Store.ListTimeSeriesData()
+	rawResults := s.Store.ListTimeSeriesData(DB_RECORD_FETCH_LIMIT)
 
 	// Iterate through all our results and generate our results payload to send to client.
 	var results []*c.TimeSeriesDatumListItemResponse

@@ -24,10 +24,18 @@ You must have the following installed before proceeding. If you are missing any 
     GO111MODULE=on go get -u github.com/mikaponics/mikapod-storage
     ```
 
-2. Run our application.
+## Usage
+
+Run our application.
 
     ```
     mikapod-storage serve
+    ```
+
+View the latest records
+
+    ```
+    mikapod-storage print --lines 100
     ```
 
 3. You now should see a message saying ``Started storage service`` then the application is running.

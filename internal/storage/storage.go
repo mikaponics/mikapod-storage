@@ -46,8 +46,13 @@ func (s *MikapodDB) InsertTimeSeriesData(instrument int32, value float32, t time
 	return err
 }
 
-func (s *MikapodDB) ListTimeSeriesData() []TimeSeriesDatum {
-	rows, _ := s.database.Query("SELECT id, instrument, value, timestamp FROM time_series_data LIMIT 250")
+func (s *MikapodDB) ListTimeSeriesData(limit int32) []TimeSeriesDatum {
+	statement, err := s.database.Prepare("SELECT id, instrument, value, timestamp FROM time_series_data ORDER BY id DESC LIMIT ?")
+	if err != nil {
+		log.Println(err)
+		return nil
+	}
+	rows, _ := statement.Query(limit)
 	arr := make([]TimeSeriesDatum, 1)
 
 	var id int64
