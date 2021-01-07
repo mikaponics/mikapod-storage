@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
     "errors"
+	"time"
 
 	"github.com/spf13/cobra"
 
@@ -19,7 +20,7 @@ func runPrintCmd(limit int32) {
 	data := storage.ListTimeSeriesData(limit)
 	for _, datum := range(data) {
 		if datum.Id != 0 {
-			fmt.Println("ID:", datum.Id,"| Instrument:", datum.Instrument, "| Timestamp:", datum.Timestamp, "| Value:", datum.Value)
+			fmt.Println("ID:", datum.Id,"| Instrument:", datum.Instrument, "| Timestamp:", time.Unix(datum.Timestamp, 0), "| Value:", datum.Value)
 		}
 	}
 }
