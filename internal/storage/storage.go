@@ -2,7 +2,7 @@ package storage
 
 import (
 	"database/sql"
-	"time"
+	// "time"
 	// "fmt"
 	// "strconv"
 	"log"
@@ -14,7 +14,7 @@ type TimeSeriesDatum struct {
 	Id         int64
 	Instrument int32
 	Value      float32
-	Timestamp  time.Time
+	Timestamp  int64
 }
 
 type MikapodDB struct {
@@ -39,7 +39,7 @@ func InitMikapodDB() *MikapodDB {
 	}
 }
 
-func (s *MikapodDB) InsertTimeSeriesData(instrument int32, value float32, t time.Time) error {
+func (s *MikapodDB) InsertTimeSeriesData(instrument int32, value float32, t int64) error {
 	statement, err := s.database.Prepare("INSERT INTO time_series_data (instrument, value, timestamp) VALUES (?, ?, ?)")
 	statement.Exec(instrument, value, t)
 	// log.Printf("Executed Insertion")
@@ -58,7 +58,7 @@ func (s *MikapodDB) ListTimeSeriesData(limit int32) []TimeSeriesDatum {
 	var id int64
 	var instrument int32
 	var value float32
-	var timestamp time.Time
+	var timestamp int64
 	for rows.Next() {
 		rows.Scan(&id, &instrument, &value, &timestamp)
 		// log.Printf("Rows: %v", rows)

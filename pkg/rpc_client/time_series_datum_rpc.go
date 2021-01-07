@@ -1,7 +1,7 @@
 package rpc_client
 
 import (
-	"time"
+	// "time"
 	// "errors"
 	// "database/sql"
 	"log"
@@ -13,7 +13,7 @@ import (
 type TimeSeriesDatumCreateRequest struct {
     Instrument int32 `json:"instrument"`
     Value float32 `json:"value"`
-    Timestamp time.Time `json:"timestamp"`
+    Timestamp int64 `json:"timestamp"`
 }
 
 type TimeSeriesDatumCreateResponse struct {
@@ -26,7 +26,7 @@ type TimeSeriesDatumListItemResponse struct {
 	Id int64
     Instrument int32 `json:"instrument"`
     Value float32 `json:"value"`
-    Timestamp time.Time `json:"timestamp"`
+    Timestamp int64 `json:"timestamp"`
 }
 
 type TimeSeriesDatumListResponse struct {
