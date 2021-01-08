@@ -35,7 +35,6 @@ func New(addr string) *MikapodStorageService {
 	if addr == "" {
 		log.Fatal("LOG | MikapodStorageService | New | No address set.")
 	}
-	log.Println("LOG | MikapodStorageService | New | Attempting to connect to soil reader...")
 
     // The following code will dial the server or attempt to redial the server
 	// 100 times before it the client returns a fatal error.
@@ -43,7 +42,6 @@ func New(addr string) *MikapodStorageService {
 	if err != nil {
 		client = retryMultipleAndBlockingDailHTTP(addr)
 	}
-	log.Println("LOG | MikapodStorageService | New | Successfully connected to soil reader.")
 
 	return &MikapodStorageService{
 		Client: client,
